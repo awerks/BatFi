@@ -27,6 +27,13 @@ jobs:
               with:
                   fetch-depth: 0
 
+            - name: Trust Swift macros and package plugins (CI)
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+                  defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+
             - name: Show Xcode version
               run: xcodebuild -version
 
@@ -35,6 +42,8 @@ jobs:
               run: |
                   set -euo pipefail
                   xcodebuild -resolvePackageDependencies \
+                    -skipPackagePluginValidation \
+                    -skipMacroValidation \
                     -project "$PROJECT" \
                     -scheme "$SCHEME" \
                     -destination "$DESTINATION"
@@ -47,6 +56,8 @@ jobs:
                   mkdir -p "$PWD/build"
 
                   if ! xcodebuild archive \
+                    -skipPackagePluginValidation \
+                    -skipMacroValidation \
                     -project "$PROJECT" \
                     -scheme "$SCHEME" \
                     -configuration "$CONFIGURATION" \
