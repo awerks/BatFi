@@ -17,6 +17,9 @@ jobs:
             SCHEME: BatFi
             CONFIGURATION: Release
             DESTINATION: "platform=macOS,arch=arm64"
+            DEVELOPMENT_TEAM: YL78V8PY6H
+            CI_BUILD_NUMBER: ${{ github.run_number }}
+            BUILD_NUMBER: ${{ github.run_number }}
 
         steps:
             - name: Checkout
@@ -43,7 +46,7 @@ jobs:
                   ARCHIVE_PATH="$PWD/build/${SCHEME}.xcarchive"
                   mkdir -p "$PWD/build"
 
-                  xcodebuild archive \
+                  if ! xcodebuild archive \
                     -project "$PROJECT" \
                     -scheme "$SCHEME" \
                     -configuration "$CONFIGURATION" \
@@ -51,9 +54,13 @@ jobs:
                     -archivePath "$ARCHIVE_PATH" \
                     CODE_SIGNING_ALLOWED=NO \
                     CODE_SIGNING_REQUIRED=NO \
-                    | tee xcodebuild.log
-
-                  exit ${PIPESTATUS[0]}
+                    DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
+                    | tee xcodebuild.log; then
+                    echo "xcodebuild failed. Showing key errors:" >&2
+                    grep -n "error:" xcodebuild.log || true
+                    tail -n 200 xcodebuild.log || true
+                    exit 1
+                  fi
 
             - name: Package app from archive
               id: package
