@@ -15,6 +15,21 @@ final class AppInstaller: NSObject, ObservableObject, URLSessionDownloadDelegate
     private let appBundleName = "BatFi.app"
     private lazy var installedAppPath = "/Applications/\(appBundleName)"
     private lazy var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "App Installer")
+    private lazy var sessionConfig: URLSessionConfiguration = {
+        let configuration = URLSessionConfiguration.default
+        configuration.waitsForConnectivity = true
+        configuration.timeoutIntervalForRequest = 130
+        configuration.timeoutIntervalForResource = 130
+        return configuration
+    }()
+    private lazy var downloadURL: URL = {
+        if let downloadURLString = Bundle.main.object(forInfoDictionaryKey: "BATFI_DOWNLOAD_URL") as? String,
+           let url = URL(string: downloadURLString),
+           !downloadURLString.isEmpty {
+            return url
+        }
+        return URL(string: "https://github.com/rurza/BatFi/releases/latest/download/BatFi-macOS.zip")!
+    }()
 
     override init() {
         super.init()
@@ -111,7 +126,7 @@ final class AppInstaller: NSObject, ObservableObject, URLSessionDownloadDelegate
         updateInstallationState(.downloading(progress: 0))
 
         let session = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: nil)
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 130)
+        let request = URLRequest(url: downloadURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 130)
         logger.debug("Downloading app")
         let task = session.downloadTask(with: request)
         task.resume()

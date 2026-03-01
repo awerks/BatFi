@@ -5,8 +5,7 @@
 //  Created by Adam Różyński on 01/05/2024.
 //
 
-import Foundation
-import Sentry
+import AppKit
 
-let app: NSApplication = SentryCrashExceptionApplication.shared
+let app: NSApplication = .shared
 _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)

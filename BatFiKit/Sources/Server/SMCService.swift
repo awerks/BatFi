@@ -7,7 +7,6 @@
 
 import Foundation
 import os
-import Sentry
 import Shared
 
 actor SMCService {
@@ -197,7 +196,6 @@ actor SMCService {
                 } else {
                     logger.error("Failed to open SMC after \(attempts) attempts. Giving up...")
                     logger.critical("SMC opening error: \(error)")
-                    SentrySDK.capture(error: error)
                     return
                 }
             }

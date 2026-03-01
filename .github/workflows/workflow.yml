@@ -24,16 +24,6 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Generate CI-only Swift files
-              shell: bash
-              env:
-                  CI_PRIMARY_REPOSITORY_PATH: ${{ github.workspace }}
-                  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-                  BATFI_DOWNLOAD_URL: ${{ secrets.BATFI_DOWNLOAD_URL }}
-              run: |
-                  set -euo pipefail
-                  bash ci_scripts/ci_post_clone.sh
-
             - name: Show Xcode version
               run: xcodebuild -version
 

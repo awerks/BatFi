@@ -23,7 +23,6 @@ extension Target.Dependency {
     static let persistence: Self = "Persistence"
     static let powerCharts: Self = "PowerCharts"
     static let powerDistributionInfo: Self = "PowerDistributionInfo"
-    static let sentry: Self = .product(name: "Sentry", package: "sentry-cocoa")
     static let settings: Self = "Settings"
     static let settingsKit: Self = .product(name: "SettingsKit", package: "SettingsKit")
     static let shared: Self = "Shared"
@@ -65,7 +64,6 @@ let package = Package(
         .package(url: "https://github.com/rurza/StatusItemArrowKit.git", branch: "main"),
         .package(url: "https://github.com/simibac/ConfettiSwiftUI", from: "1.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-identified-collections", from: "1.0.0"),
-        .package(url: "https://github.com/getsentry/sentry-cocoa", from: "8.25.0"),
         .package(url: "https://github.com/ChimeHQ/AsyncXPCConnection", from: "1.1.0"),
         .package(url: "https://github.com/rurza/KeyboardShortcuts", branch: "main"),
         .package(url: "https://github.com/Kitura/Swift-JWT", from: "4.0.0")
@@ -155,7 +153,6 @@ let package = Package(
                 .dependencies,
                 .jwt,
                 .persistence,
-                .sentry,
                 .shared,
                 .sparkle,
             ]
@@ -228,10 +225,7 @@ let package = Package(
         ]),
         .target(name: "Server", dependencies: [
             .asyncXPCConnection,
-            .defaults,
-            .defaultsKeys,
             .embeddedPropertyList,
-            .sentry,
             .shared,
         ]),
         .target(
