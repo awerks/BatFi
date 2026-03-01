@@ -18,7 +18,7 @@ On the other hand, BatFi works differently. The app allows you to set a user-cho
   <img src="https://github.com/rurza/BatFi/assets/2467137/ad75de07-157b-48ba-8584-27ce930d078e" width=300>
 </p>
 
-## Localization
+## Localization 
 
 The app uses [String Catalog](https://developer.apple.com/documentation/xcode/localizing-and-varying-text-with-a-string-catalog) which makes localization super straightforward.
 
